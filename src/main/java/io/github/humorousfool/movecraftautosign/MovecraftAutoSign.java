@@ -53,6 +53,17 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
             Sign sign = (Sign) block.getState();
             String[] originalLines = sign.getLines().clone();
 
+            if(sign.getLine(0).equalsIgnoreCase("[Crew]"))
+            {
+                sign.setLine(0, "Crew:");
+                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.update();
+                MovecraftLocation relativeLocation = loc.subtract(event.getCraft().getHitBox().getMidPoint());
+                SignData data = new SignData(relativeLocation, originalLines);
+                signs.add(data);
+                continue;
+            }
+
             for(int i = 0; i < 4; i++)
             {
                 if(sign.getLine(i).equalsIgnoreCase("[Pilot]"))
@@ -61,7 +72,6 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                     sign.update();
                     MovecraftLocation relativeLocation = loc.subtract(event.getCraft().getHitBox().getMidPoint());
                     SignData data = new SignData(relativeLocation, originalLines);
-                    System.out.println(relativeLocation);
                     signs.add(data);
                 }
             }
@@ -86,7 +96,6 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                     MovecraftLocation oldLocation = d.relativeLocation;
                     MovecraftLocation newLocation = MathUtils.rotateVec(event.getRotation(), oldLocation).add(event.getOriginPoint());
                     d.relativeLocation = newLocation.subtract(event.getCraft().getHitBox().getMidPoint());
-                    System.out.println(d.relativeLocation);
                 }
             }
         }.runTaskLater(this, 2);
@@ -102,7 +111,6 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
         {
             MovecraftLocation mLoc = d.relativeLocation.add(event.getCraft().getHitBox().getMidPoint());
             Block block = event.getCraft().getW().getBlockAt(mLoc.getX(), mLoc.getY(), mLoc.getZ());
-            System.out.println(block.getLocation());
 
             if(block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST)
                 continue;
