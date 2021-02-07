@@ -91,6 +91,9 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
             @Override
             public void run()
             {
+                if(!craftSigns.containsKey(event.getCraft()))
+                    return;
+
                 for(SignData d : craftSigns.get(event.getCraft()))
                 {
                     MovecraftLocation oldLocation = d.relativeLocation;
