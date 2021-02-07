@@ -1,7 +1,6 @@
 package io.github.humorousfool.movecraftautosign;
 
 import net.countercraft.movecraft.MovecraftLocation;
-import net.countercraft.movecraft.Rotation;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.events.CraftDetectEvent;
 import net.countercraft.movecraft.events.CraftReleaseEvent;
@@ -16,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
