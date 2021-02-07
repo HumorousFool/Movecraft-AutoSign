@@ -1,0 +1,10 @@
+name: Movecraft-Autosign
+version: 1.0
+description: An extension for Movecraft that allows dynamic names on signs.
+prefix: Movecraft-Autosign
+author: HumorousFool
+website: https://humorousfool.github.io
+
+main: io.github.humorousfool.movecraftautosign.MovecraftAutoSign
+depend: [Movecraft]
+api-version: 1.12
