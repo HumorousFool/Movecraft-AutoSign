@@ -25,6 +25,8 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
 
     public void onEnable()
     {
+        saveDefaultConfig();
+
         if(getServer().getPluginManager().getPlugin("Movecraft") == null || !getServer().getPluginManager().getPlugin("Movecraft").isEnabled())
         {
             getLogger().log(Level.SEVERE, "Movecraft not found! Disabling plugin!");
@@ -55,6 +57,9 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
 
             if(sign.getLine(0).equalsIgnoreCase("[Crew]"))
             {
+                if(!getConfig().getBoolean("enableAutoCrew"))
+                    continue;
+
                 sign.setLine(0, "Crew:");
                 sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
                 sign.update();
@@ -63,6 +68,39 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                 signs.add(data);
                 continue;
             }
+            else if(sign.getLine(0).toLowerCase().contains("place pilot"))
+            {
+                if(!getConfig().getBoolean("enablePermanentPilot"))
+                    continue;
+
+                sign.setLine(0, "Pilot:");
+                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.update();
+                continue;
+            }
+            else if(sign.getLine(0).toLowerCase().contains("place crew"))
+            {
+                if(!getConfig().getBoolean("enablePermanentCrew"))
+                    continue;
+
+                sign.setLine(0, "Crew:");
+                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.update();
+                continue;
+            }
+            else if(sign.getLine(0).toLowerCase().contains("place private") || sign.getLine(0).toLowerCase().contains("place [private]"))
+            {
+                if(!getConfig().getBoolean("enablePermanentPrivate"))
+                    continue;
+
+                sign.setLine(0, "[Private]");
+                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.update();
+                continue;
+            }
+
+            if(!getConfig().getBoolean("enableAutoPilot"))
+                continue;
 
             for(int i = 0; i < 4; i++)
             {

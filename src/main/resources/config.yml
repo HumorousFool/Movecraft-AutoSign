@@ -1,0 +1,5 @@
+enableAutoPilot: true
+enableAutoCrew: true
+enablePermanentPilot: true
+enablePermanentCrew: true
+enablePermanentPrivate: true
