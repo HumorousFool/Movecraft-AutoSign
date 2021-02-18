@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -118,28 +119,18 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
         craftSigns.put(event.getCraft(), signs);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onRotate(CraftRotateEvent event)
     {
         if(event.isCancelled() || !craftSigns.containsKey(event.getCraft()))
             return;
 
-        new BukkitRunnable()
+        for(SignData d : craftSigns.get(event.getCraft()))
         {
-            @Override
-            public void run()
-            {
-                if(!craftSigns.containsKey(event.getCraft()))
-                    return;
-
-                for(SignData d : craftSigns.get(event.getCraft()))
-                {
-                    MovecraftLocation oldLocation = d.relativeLocation;
-                    MovecraftLocation newLocation = MathUtils.rotateVec(event.getRotation(), oldLocation).add(event.getOriginPoint());
-                    d.relativeLocation = newLocation.subtract(event.getCraft().getHitBox().getMidPoint());
-                }
-            }
-        }.runTaskLater(this, 2);
+            MovecraftLocation oldLocation = d.relativeLocation;
+            MovecraftLocation newLocation = MathUtils.rotateVec(event.getRotation(), oldLocation).add(event.getOriginPoint());
+            d.relativeLocation = newLocation.subtract(event.getNewHitBox().getMidPoint());
+        }
     }
 
     @EventHandler
