@@ -55,21 +55,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
 
             Sign sign = (Sign) block.getState();
             String[] originalLines = sign.getLines().clone();
-
-            if(sign.getLine(0).equalsIgnoreCase("[Crew]"))
-            {
-                if(!getConfig().getBoolean("enableAutoCrew"))
-                    continue;
-
-                sign.setLine(0, "Crew:");
-                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
-                sign.update();
-                MovecraftLocation relativeLocation = loc.subtract(event.getCraft().getHitBox().getMidPoint());
-                SignData data = new SignData(relativeLocation, originalLines);
-                signs.add(data);
-                continue;
-            }
-            else if(sign.getLine(0).toLowerCase().contains("place pilot"))
+            if(sign.getLine(0).toLowerCase().contains("place pilot"))
             {
                 if(!getConfig().getBoolean("enablePermanentPilot"))
                     continue;
