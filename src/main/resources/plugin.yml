@@ -7,4 +7,4 @@ website: https://humorousfool.github.io
 
 main: io.github.humorousfool.movecraftautosign.MovecraftAutoSign
 depend: [Movecraft]
-api-version: 1.12
+api-version: 1.14
