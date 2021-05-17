@@ -5,7 +5,7 @@ import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.events.CraftDetectEvent;
 import net.countercraft.movecraft.events.CraftReleaseEvent;
 import net.countercraft.movecraft.events.CraftRotateEvent;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -13,7 +13,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
         {
             Block block = event.getCraft().getW().getBlockAt(loc.getX(), loc.getY(), loc.getZ());
 
-            if(block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST)
+            if(block.getType().name().endsWith("SIGN"))
                 continue;
 
             Sign sign = (Sign) block.getState();
@@ -130,7 +129,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
             MovecraftLocation mLoc = d.relativeLocation.add(event.getCraft().getHitBox().getMidPoint());
             Block block = event.getCraft().getW().getBlockAt(mLoc.getX(), mLoc.getY(), mLoc.getZ());
 
-            if(block.getType() != Material.WALL_SIGN && block.getType() != Material.SIGN_POST)
+            if(block.getType().name().endsWith("SIGN"))
                 continue;
 
             Sign sign = (Sign) block.getState();
