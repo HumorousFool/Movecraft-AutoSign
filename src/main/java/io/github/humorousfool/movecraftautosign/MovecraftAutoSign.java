@@ -2,11 +2,13 @@ package io.github.humorousfool.movecraftautosign;
 
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.PlayerCraft;
 import net.countercraft.movecraft.events.CraftDetectEvent;
 import net.countercraft.movecraft.events.CraftReleaseEvent;
 import net.countercraft.movecraft.events.CraftRotateEvent;
 import net.countercraft.movecraft.util.MathUtils;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,18 +41,19 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
     @EventHandler
     public void onDetect(CraftDetectEvent event)
     {
-        if(event.isCancelled() || event.getCraft().getNotificationPlayer() == null)
+        if(event.isCancelled() | !(event.getCraft() instanceof PlayerCraft))
             return;
+        PlayerCraft craft = (PlayerCraft) event.getCraft();
 
         List<SignData> signs = new ArrayList<>();
 
         for(MovecraftLocation loc : event.getCraft().getHitBox())
         {
-            Block block = event.getCraft().getW().getBlockAt(loc.getX(), loc.getY(), loc.getZ());
+            Block block = event.getCraft().getWorld().getBlockAt(loc.getX(), loc.getY(), loc.getZ());
 
-            if(block.getType().name().endsWith("SIGN"))
+            if(!block.getType().name().endsWith("SIGN") || !(block.getState() instanceof Sign))
                 continue;
-
+            //Why do I have to do this? I don't know but my server seems to think block.getState() refers to a CraftBlockState.
             Sign sign = (Sign) block.getState();
             String[] originalLines = sign.getLines().clone();
             if(sign.getLine(0).toLowerCase().contains("place pilot"))
@@ -59,7 +62,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                     continue;
 
                 sign.setLine(0, "Pilot:");
-                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.setLine(1, craft.getPlayer().getName());
                 sign.update();
                 continue;
             }
@@ -69,7 +72,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                     continue;
 
                 sign.setLine(0, "Crew:");
-                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.setLine(1, craft.getPlayer().getName());
                 sign.update();
                 continue;
             }
@@ -79,7 +82,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
                     continue;
 
                 sign.setLine(0, "[Private]");
-                sign.setLine(1, event.getCraft().getNotificationPlayer().getName());
+                sign.setLine(1, craft.getPlayer().getName());
                 sign.update();
                 continue;
             }
@@ -91,7 +94,7 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
             {
                 if(sign.getLine(i).equalsIgnoreCase("[Pilot]"))
                 {
-                    sign.setLine(i, event.getCraft().getNotificationPlayer().getName());
+                    sign.setLine(i, craft.getPlayer().getName());
                     sign.update();
                     MovecraftLocation relativeLocation = loc.subtract(event.getCraft().getHitBox().getMidPoint());
                     SignData data = new SignData(relativeLocation, originalLines);
@@ -126,9 +129,9 @@ public class MovecraftAutoSign extends JavaPlugin implements Listener
         for (SignData d : craftSigns.get(event.getCraft()))
         {
             MovecraftLocation mLoc = d.relativeLocation.add(event.getCraft().getHitBox().getMidPoint());
-            Block block = event.getCraft().getW().getBlockAt(mLoc.getX(), mLoc.getY(), mLoc.getZ());
+            Block block = event.getCraft().getWorld().getBlockAt(mLoc.getX(), mLoc.getY(), mLoc.getZ());
 
-            if(block.getType().name().endsWith("SIGN"))
+            if(!block.getType().name().endsWith("SIGN") || !(block.getState() instanceof Sign))
                 continue;
 
             Sign sign = (Sign) block.getState();
